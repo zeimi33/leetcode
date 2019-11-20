@@ -17,3 +17,7 @@
    to hold additional elements from B. The number of elements initialized in A and B are m and n respectively.
    
 8. 给定一个数组和一个值，让求出这个数组中两个值的和等于这个给定值的坐 标。输出是有要求的，1， 坐标较小的放在前面，较大的放在后面。2， 这俩坐标不能为零。
+
+9. 给定一个整型数组num，找出这个数组中满足这个条件的所有数字：
+   num[i]+num[j]+num[k] = 0. 并且所有 的答案是要和其他不同的，
+   也就是说两个相同的答案是不被接受的。
