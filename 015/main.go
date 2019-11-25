@@ -40,3 +40,20 @@ func solution(num int)bool{
 	}
 	return  tmp == num_test
 }
+
+func find_next_num (num int)int{
+
+	tmp := num
+	bit := 0
+	for tmp>0{
+		bit++
+	}
+	if bit %2 ==0{
+		return tmp +
+	}
+}
+
+func exponent (num int )int{
+	ret := 1
+	for i
+}
