@@ -1,5 +1,13 @@
 package main
 
+
+
+func main(){
+	a := int32
+}
+
+
+
 func superEggDrop(K int, N int) int {
 	dp := make([][]int, K+1)
 	for i := 0; i <= K; i++ {
@@ -17,7 +25,6 @@ func superEggDrop(K int, N int) int {
 	for n := 0; n < N; n++ {
 		dp[1][n] = n
 	}
-
 	for step := 1; step <= N; step++ {
 		for k := 1; k <= K; k++ {
 			dp[k][step] = dp[k][step-1] + dp[k-1][step-1] + 1
