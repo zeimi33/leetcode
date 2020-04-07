@@ -28,7 +28,7 @@ func checkLast(grid [][]int, x, y int, guandao chan int) {
 	num := len(grid)
 	for i := 0; i < num; i++ {//x移动
 		for k := 0; k < num; k++ {//y移动
-			if()
+			if(grid[x])
 		}
 	}
 }

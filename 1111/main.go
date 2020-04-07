@@ -25,5 +25,3 @@ func maxDepthAfterSplit(seq string) []int {
 	return ret
 }
 
-depth++
-res[i] = depth % 2
