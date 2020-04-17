@@ -1,10 +1,10 @@
 package main
 
-import (
-	"./test"
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	a := net.dail()
+	a := []byte{'b', 'b'}
+	c := a[:0]
+	fmt.Println(c, c == nil, len(c), cap(c))
+	fmt.Println(a, c)
 }

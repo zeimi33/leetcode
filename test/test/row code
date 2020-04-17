@@ -1,0 +1,63 @@
+func (d *Distinct) Next() (sqlbase.EncDatumRow, *ProducerMetadata) {
+	for d.State == StateRunning {
+		row, meta := d.input.Next()
+		if meta != nil {
+			if meta.Err != nil {
+				d.MoveToDraining(nil /* err */)
+			}
+			return nil, meta
+		}
+		if row == nil {
+			d.MoveToDraining(nil /* err */)
+			break
+		}
+
+		// If we are processing DISTINCT(x, y) and the input stream is ordered
+		// by x, we define x to be our group key. Our seen set at any given time
+		// is only the set of all rows with the same group key. The encoding of
+		// the row is the key we use in our 'seen' set.
+		encoding, err := d.encode(d.scratch, row)
+		if err != nil {
+			d.MoveToDraining(err)
+			break
+		}
+		d.scratch = encoding[:0]
+
+		// The 'seen' set is reset whenever we find consecutive rows differing on the
+		// group key thus avoiding the need to store encodings of all rows.
+		matched, err := d.matchLastGroupKey(row)
+		if err != nil {
+			d.MoveToDraining(err)
+			break
+		}
+
+		if !matched {
+			// Since the sorted distinct columns have changed, we know that all the
+			// distinct keys in the 'seen' set will never be seen again. This allows
+			// us to keep the current arena block and overwrite strings previously
+			// allocated on it, which implies that UnsafeReset() is safe to call here.
+			copy(d.lastGroupKey, row)
+			d.haveLastGroupKey = true
+			if err := d.arena.UnsafeReset(d.Ctx); err != nil {
+				d.MoveToDraining(err)
+				break
+			}
+			d.seen = make(map[string]struct{})
+		}
+
+		if _, ok := d.seen[string(encoding)]; ok {
+			continue
+		}
+		s, err := d.arena.AllocBytes(d.Ctx, encoding)
+		if err != nil {
+			d.MoveToDraining(err)
+			break
+		}
+		d.seen[s] = struct{}{}
+
+		if outRow := d.ProcessRowHelper(row); outRow != nil {
+			return outRow, nil
+		}
+	}
+	return nil, d.DrainHelper()
+}

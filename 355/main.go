@@ -1,8 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
+	b := time.Now()
+	d := b.Local()
+	
 	c := Constructor()
 	c.PostTweet(1, 5)
 	c.PostTweet(2, 3)
