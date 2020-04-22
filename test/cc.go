@@ -1,16 +1,44 @@
 package main
 
 import (
-	"sync"
+	"fmt"
+	"time"
 )
 
-type mmaapp struct {
-	m   map[string]struct{}
-	mx  sync.Mutex
-	w   sync.WaitGroup
-	c   chan int
-	run bool
+func main() {
+	a := make(chan int)
+	go cc(a)
+	for {
+		i, ok := <-a
+		if !ok {
+			break
+		}
+		fmt.Println(i)
+	}
 }
+
+func cc(a chan int) {
+	defer close(a)
+	for i := 0; i < 100; i++ {
+		a <- i
+	}
+	time.Sleep(3 * time.Second)
+}
+
+// func main() {
+// 	a := make(chan int)
+// 	close(a)
+// 	time.Sleep(10 * time.Second)
+// 	close(a)
+// }
+
+// type mmaapp struct {
+// 	m   map[string]struct{}
+// 	mx  sync.Mutex
+// 	w   sync.WaitGroup
+// 	c   chan int
+// 	run bool
+// }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++s
 // func main() {
