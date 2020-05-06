@@ -2,28 +2,31 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 func main() {
-	a := make(chan int)
-	go cc(a)
-	for {
-		i, ok := <-a
-		if !ok {
-			break
-		}
-		fmt.Println(i)
-	}
+	fmt.Println(int32(1<<31 - 1))
+	fmt.Println(int32(-(1 << 31)))
+	fmt.Println(a(2))
 }
 
-func cc(a chan int) {
-	defer close(a)
-	for i := 0; i < 100; i++ {
-		a <- i
+func a(c int) (ok bool) {
+	c--
+	if c < 0 {
+		return
 	}
-	time.Sleep(3 * time.Second)
+	ok = true
+	return a(c)
+	return false
 }
+
+// func cc(a chan int) {
+// 	defer close(a)
+// 	for i := 0; i < 100; i++ {
+// 		a <- i
+// 	}
+// 	time.Sleep(3 * time.Second)
+// }
 
 // func main() {
 // 	a := make(chan int)
