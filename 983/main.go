@@ -1,22 +1,36 @@
 package main
 
-func main(){
+import "fmt"
+
+func main() {
 	fmt.Println()
 }
 
 func mincostTickets(days []int, costs []int) int {
-	dp := make([]int,len(days))
-	for i,v := range  days{
-		for j:=i ;j<len(days);j++{
-			if days[i] - v ==0{
-				if dp[j]==0{
-					dp[j] = costs[0]
-				}
-				continue
-			}
-			if days[i]-v >1 && days[i]-v <7 {
-				min := 
+	year := make([]int, days[len(days)-1]+1)
+	for k, v := range days {
+		if k != 0 {
+			for i := days[k-1] + 1; i < v; i++ {
+				year[i] = year[days[k-1]]
 			}
 		}
+		temp1 := min(costs[0]+year[max(v-1, 0)], costs[1]+year[max(v-7, 0)])
+		year[v] = min(temp1, costs[2]+year[max(v-30, 0)])
 	}
+	return year[days[len(days)-1]]
+}
+func min(x int, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+
+}
+
+func max(i int, j int) int {
+	if i > j {
+		return i
+	}
+	return j
+
 }

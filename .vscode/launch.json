@@ -5,18 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch file",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "/Users/zhangyuekun/go/src/leetcode/56"
-        },
-        {
             "name": "Launch",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "/Users/zhangyuekun/go/src/leetcode/56",
+            "program": "${fileDirname}",
             "env": {},
             "args": []
         }
